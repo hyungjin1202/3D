@@ -10,6 +10,16 @@ public class Enemy : MonoBehaviour
 
     private float _speed = 3;
 
+    private int _maxHp = 100;
+    private int _curHp = 0;   
+
+    private Hpbar _hpbar;
+
+    public void SetHpbar(Hpbar hpbar)
+    {
+        _hpbar = hpbar;
+    }
+
     [SerializeField]
     private Animator _animator;
 
@@ -17,6 +27,8 @@ public class Enemy : MonoBehaviour
     {
         if (_animator != null)
             _animator = GetComponent<Animator>();
+
+        _curHp = _maxHp;
     }
 
     // Update is called once per frame
@@ -60,7 +72,7 @@ public class Enemy : MonoBehaviour
 
         if (stateInfo.normalizedTime > 0.99f)
         {
-            // STate ¹Ù²ãÁÖ¸é µÇ°Ú´Ù. 
+            // STate ï¿½Ù²ï¿½ï¿½Ö¸ï¿½ ï¿½Ç°Ú´ï¿½. 
             Debug.Log(stateInfo.normalizedTime);
             _state = CHARSTATE.IDLE;
         }
@@ -74,7 +86,7 @@ public class Enemy : MonoBehaviour
 
         if (stateInfo.normalizedTime > 0.99f)
         {
-            // STate ¹Ù²ãÁÖ¸é µÇ°Ú´Ù. 
+            // STate ï¿½Ù²ï¿½ï¿½Ö¸ï¿½ ï¿½Ç°Ú´ï¿½. 
             Debug.Log(stateInfo.normalizedTime);
             _state = CHARSTATE.IDLE;
         }
@@ -83,6 +95,12 @@ public class Enemy : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("OnTriggerEnter : " + other.name);
+
+        _curHp -= 10;
+
+        _hpbar.SetHp(_maxHp,_curHp);
+
+        Debug.Log("í˜„ìž¬ ì²´ë ¥ : " + _curHp);
 
         if(_state != CHARSTATE.HIT)
             _state = CHARSTATE.HIT;

@@ -60,6 +60,19 @@ public class UIManager : MonoBehaviour
         return ui;
     }
 
+
+    public T CreateWorldUI<T>(Transform target) where T : UIBase
+    {
+        string pageName = typeof(T).Name;
+
+        GameObject uiObject = Resources.Load<GameObject>($"UI/Prefab/{pageName}");
+        GameObject uiInstance = Instantiate(uiObject, _uiCanvas.transform);
+
+        T ui = uiInstance.GetComponent<T>(); 
+
+        return ui;    
+    }
+
     public void RemoveUI<T>() where T : UIBase
     {
         string pageName = typeof(T).Name;

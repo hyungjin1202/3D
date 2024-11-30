@@ -38,16 +38,49 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("InGameScene"); 
-        UIManager.Instance.RemoveUI<StartUI>(); 
+        
+        UIManager.Instance.RemoveUI<StartUI>();
 
+        StartCoroutine(LoadGameSceneAsync("InGameScene"));
+    }
+
+    private IEnumerator LoadGameSceneAsync(string sceneName)
+    {
+        // 로드가 완료되면 밑에 코드를 실행한다. 
+        yield return SceneManager.LoadSceneAsync(sceneName);
+        
         // 배경 맵을 로드하는 코드를 추가해야 함
         GameObject map = Resources.Load<GameObject>("3D/Prefab/Map");
         Debug.Log("맵 리소스 로드 : " + map);    
         GameObject mapInstance = Instantiate(map);
         Debug.Log("맵 인스턴스 생성 : " + mapInstance);
 
-        DontDestroyOnLoad(mapInstance);
+        // 캐릭터랑 적을 띄우면 됩니다. 
+        GameObject player = Resources.Load<GameObject>("3D/Prefab/Player");
+        GameObject playerInstance = Instantiate(player);
+        Debug.Log("플레이어 인스턴스 생성 : " + playerInstance); 
+
+
+        // 적 캐릭터 로드
+        GameObject enemy = Resources.Load<GameObject>("3D/Prefab/Enemy");
+        GameObject enemyInstance = Instantiate(enemy);
+        Debug.Log("적 인스턴스 생성 : " + enemyInstance);
+
+        // UI를 만들어보자
+        Hpbar hpbar = UIManager.Instance.CreateWorldUI<Hpbar>(playerInstance.transform);
+        hpbar.SetTarget(playerInstance.transform);
+
+        // UI를 만들어보자
+        hpbar = UIManager.Instance.CreateWorldUI<Hpbar>(enemyInstance.transform);
+        hpbar.SetTarget(enemyInstance.transform);
+
+        enemyInstance.GetComponent<Enemy>().SetHpbar(hpbar);    
+
+
+        CameraController cameraController = Camera.main.GetComponent<CameraController>();
+        cameraController.SetPlayer(playerInstance.transform);
+        cameraController.SetEnemy(enemyInstance.transform);
+
     }
 
 
