@@ -12,7 +12,7 @@ public enum CHARSTATE
 
 public class Player : MonoBehaviour
 {
-    private CHARSTATE _state = CHARSTATE.IDLE;
+    public CHARSTATE _state = CHARSTATE.IDLE;
 
     private Vector3 _direct = Vector3.zero;
 
@@ -63,12 +63,21 @@ public class Player : MonoBehaviour
 
 
         }
+        
         else if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.S))
         {
             if (_state == CHARSTATE.ATTACK || _state == CHARSTATE.HIT)
                 return;
 
             _direct = (Vector3.left + Vector3.back).normalized;            
+            _state = CHARSTATE.WALK;
+        }
+        else if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.W))
+        {
+            if (_state == CHARSTATE.ATTACK || _state == CHARSTATE.HIT)
+                return;
+
+            _direct = (Vector3.left + Vector3.forward).normalized;
             _state = CHARSTATE.WALK;
         }
         else if (Input.GetKey(KeyCode.A))
@@ -79,20 +88,28 @@ public class Player : MonoBehaviour
             _direct = Vector3.left;
             _state = CHARSTATE.WALK;
         }
+        else if (Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.W))
+        {
+            if (_state == CHARSTATE.ATTACK || _state == CHARSTATE.HIT)
+                return;
+
+            _direct = (Vector3.right + Vector3.forward).normalized;
+            _state = CHARSTATE.WALK;
+        }
+        else if (Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.S))
+        {
+            if (_state == CHARSTATE.ATTACK || _state == CHARSTATE.HIT)
+                return;
+
+            _direct = (Vector3.right + Vector3.back).normalized;
+            _state = CHARSTATE.WALK;
+        }
         else if (Input.GetKey(KeyCode.S))
         {
             if (_state == CHARSTATE.ATTACK || _state == CHARSTATE.HIT)
                 return;
 
             _direct = Vector3.back;
-            _state = CHARSTATE.WALK;
-        }
-        else if (Input.GetKey(KeyCode.W))
-        {
-            if (_state == CHARSTATE.ATTACK || _state == CHARSTATE.HIT)
-                return;
-
-            _direct = Vector3.forward;
             _state = CHARSTATE.WALK;
         }
         else if (Input.GetKey(KeyCode.D))
@@ -103,6 +120,15 @@ public class Player : MonoBehaviour
             _direct = Vector3.right;
             _state = CHARSTATE.WALK;
         }
+        else if (Input.GetKey(KeyCode.W))
+        {
+            if (_state == CHARSTATE.ATTACK || _state == CHARSTATE.HIT)
+                return;
+
+            _direct = Vector3.forward;
+            _state = CHARSTATE.WALK;
+        }
+        
         else
         {
             if (_state == CHARSTATE.ATTACK || _state == CHARSTATE.HIT)
@@ -133,7 +159,7 @@ public class Player : MonoBehaviour
 
         if (stateInfo.normalizedTime > 0.99f)
         {
-            // STate ¹Ù²ãÁÖ¸é µÇ°Ú´Ù. 
+            // STate ï¿½Ù²ï¿½ï¿½Ö¸ï¿½ ï¿½Ç°Ú´ï¿½. 
             Debug.Log(stateInfo.normalizedTime);
             _state = CHARSTATE.IDLE;
         }
@@ -147,7 +173,7 @@ public class Player : MonoBehaviour
 
         if (stateInfo.normalizedTime > 0.99f)
         {
-            // STate ¹Ù²ãÁÖ¸é µÇ°Ú´Ù. 
+            // STate ï¿½Ù²ï¿½ï¿½Ö¸ï¿½ ï¿½Ç°Ú´ï¿½. 
             Debug.Log(stateInfo.normalizedTime);
             _state = CHARSTATE.IDLE;
         }

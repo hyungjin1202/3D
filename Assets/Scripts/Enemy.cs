@@ -72,7 +72,7 @@ public class Enemy : MonoBehaviour
 
         if (stateInfo.normalizedTime > 0.99f)
         {
-            // STate �ٲ��ָ� �ǰڴ�. 
+            // STate ٲָ ǰڴ. 
             Debug.Log(stateInfo.normalizedTime);
             _state = CHARSTATE.IDLE;
         }
@@ -86,7 +86,7 @@ public class Enemy : MonoBehaviour
 
         if (stateInfo.normalizedTime > 0.99f)
         {
-            // STate �ٲ��ָ� �ǰڴ�. 
+            // STate ٲָ ǰڴ. 
             Debug.Log(stateInfo.normalizedTime);
             _state = CHARSTATE.IDLE;
         }
@@ -94,15 +94,29 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("OnTriggerEnter : " + other.name);
+        Player player = other.GetComponent<Player>();
+        if (player != null && player._state == CHARSTATE.ATTACK)  // Player가 공격 상태인지 확인
+        {
+            Debug.Log("OnTriggerEnter : " + other.name);
+            GameManager.Instance.PlayerDamage(this);
+        }
+    }
 
-        _curHp -= 10;
-
-        _hpbar.SetHp(_maxHp,_curHp);
-
-        Debug.Log("현재 체력 : " + _curHp);
-
+    // HP 관련 public 메서드 추가
+    public void TakeDamage(int damage)
+    {
+        _curHp -= damage;
+        _hpbar.SetHp(_maxHp, _curHp);
+        
         if(_state != CHARSTATE.HIT)
             _state = CHARSTATE.HIT;
     }
+
+    public int GetCurrentHp()
+    {
+        return _curHp;
+    }
+
+
+    
 }

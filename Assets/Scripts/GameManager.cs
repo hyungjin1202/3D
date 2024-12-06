@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    
+    private int Player_DAMAGE = 10;  // 충돌 데미지 상수 정의
+
    // 싱글톤 인스턴스
     private static GameManager instance;
     
@@ -46,7 +47,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator LoadGameSceneAsync(string sceneName)
     {
-        // 로드가 완료되면 밑에 코드를 실행한다. 
+        // 로드가 완되면 밑에 코드를 실행한다. 
         yield return SceneManager.LoadSceneAsync(sceneName);
         
         // 배경 맵을 로드하는 코드를 추가해야 함
@@ -83,7 +84,12 @@ public class GameManager : MonoBehaviour
 
     }
 
+    
 
-
+    public void PlayerDamage(Enemy enemy)
+    {
+        enemy.TakeDamage(Player_DAMAGE);
+        Debug.Log($"현재 적 체력: {enemy.GetCurrentHp()}");
+    }
 
 }
